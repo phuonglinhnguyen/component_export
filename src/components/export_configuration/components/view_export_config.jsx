@@ -35,7 +35,6 @@ const styles: any = (theme: any) => {
 		formControl: {
 			margin: `${theme.spacing.unit * 3}px 0px ${theme.spacing.unit * 3}px 0px`,
 			padding: '20px',
-			minHeight: '200px'
 		}
 	};
 };
@@ -46,11 +45,11 @@ export interface IDefautProps {
 	theme?: any
 }
 const ViewExportConfig: React.FC<IDefautProps> = (props) => {
-	const { classes, exConfig, setExportConfig } = props;
+	const { classes, exConfig } = props;
 	const exportFormat = exConfig.export_format;
-	console.log({ exConfig });
-
-	console.log('export_format', exportFormat);
+	
+	if (exConfig === null) return <div>Loading...</div>;
+	
 	return (
 		<React.Fragment>
 			<Grid className={classes.wrapForm} spacing={24}>
@@ -85,10 +84,10 @@ const ViewExportConfig: React.FC<IDefautProps> = (props) => {
 						</TableHead>
 					</Table>
 				</div>
-				<div style={{ overflowY: 'auto', height: '730px', width: '100%' }}>
+				<div style={{ overflowY: 'auto', height: '300px', width: '100%' }}>
 					<Table style={{ tableLayout: 'fixed' }}>
 						<TableBody>
-							{exConfig.export_format.map((field, index) => (
+							{exportFormat.map((field, index) => (
 								<TableRow key={index} className={classes.selectRow}>
 									<TableCell component="th" scope="row" className={classes.tableItem}>
 										{field.fileName}
@@ -103,4 +102,9 @@ const ViewExportConfig: React.FC<IDefautProps> = (props) => {
 		</React.Fragment>
 	);
 };
+
+ViewExportConfig.defaultProps = {
+	exConfig: null
+};
+
 export default withStyles(styles, { withTheme: true })(ViewExportConfig);

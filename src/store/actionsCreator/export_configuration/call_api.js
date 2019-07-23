@@ -1,11 +1,10 @@
 import { crudGetList, crudUpdate, crudDelete, crudCreate, getDataObject } from '@dgtx/coreui';
 import { showNotification } from '@dgtx/coreui';
-
+import { setIsOpenAddDialog, setIsOpenDelDialog } from './main';
 import * as actions from '../../actions/export_configuration';
 
 export const callAPIGetDataExport = (input: any) => async (dispatch: any) => {
 	const { projectId } = input;
-	console.log({ projectId });
 
 	let data = await new Promise((resolve, reject) => {
 		dispatch(
@@ -27,6 +26,34 @@ export const callAPIGetDataExport = (input: any) => async (dispatch: any) => {
 	});
 	return data;
 };
+
+export const callAPICreateDataExport = (input: any) => async (dispatch: any) => {
+	const { projectId, data } = input;
+	// dispatch(setPending());
+	dispatch(
+		crudCreate(
+			'export_configuration',
+			{ data: data, projectId: projectId },
+			{
+				onSuccess: async () => {
+					// dispatch(setSuccess());
+					dispatch(
+						showNotification(`${actions.KEY_TRANSLATE}.add_success`, 'success', {
+							i18n: true,
+							duration: 1500
+						})
+					);
+					dispatch(setIsOpenAddDialog(false));
+				},
+				onFailure: () => {
+					// dispatch(setError());
+					dispatch(showNotification(`${actions.KEY_TRANSLATE}.add_error`, 'error', { i18n: true, duration: 1500 }));
+				}
+			}
+		)
+	);
+};
+
 export const callAPIDeleteDataExport = (input: any) => async (dispatch: any) => {
 	const { projectId, id } = input;
 	// dispatch(setPending());
@@ -43,7 +70,7 @@ export const callAPIDeleteDataExport = (input: any) => async (dispatch: any) => 
 							duration: 1500
 						})
 					);
-					// dispatch(setIsOpenDelDialog(false));
+					dispatch(setIsOpenDelDialog(false));
 				},
 				onFailure: (error) => {
 					console.log(error);

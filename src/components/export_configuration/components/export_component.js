@@ -16,6 +16,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/AddBox';
 import Tooltip from '@material-ui/core/Tooltip';
 import ViewIcon from '@material-ui/icons/RemoveRedEye';
 import EditIcon from '@material-ui/icons/Edit';
@@ -23,6 +24,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TablePagination from '@material-ui/core/TablePagination';
 import { getTimeByCronValue } from '@dgtx/core-component-ui';
 import { AddDialogExport, ViewDialog, DeleteDialogExport } from './ExportDialog';
+import ExConfig from './Models/ExConfig';
 const styles: any = (theme: any) => {
 	return {
 		container: {
@@ -119,11 +121,9 @@ const ExportComponent: React.FC<IDefautProps, IDefautState> = (props) => {
 		setIsOpenAddDialog,
 		setIsOpenViewDialog,
 		setIsOpenDelDialog,
-		setIsCloseDialog,
 		isOpenAdd,
 		isOpenView,
-		isOpenDel,
-		deleteDataExport
+		isOpenDel
 	} = props;
 
 	const exportConfigs = data.data;
@@ -182,9 +182,20 @@ const ExportComponent: React.FC<IDefautProps, IDefautState> = (props) => {
 								onChange={onChangeSearch}
 							/>
 						</div>
-						<Button variant="outlined" color="primary" onClick={() => setIsOpenAddDialog(true)}>
-							Add Config
-						</Button>
+						<IconButton
+							size="large"
+							onClick={() => {
+								let project_id = props.history.location.pathname
+									.replace('/projects/', '')
+									.replace('/export-config', '');
+								let new_config = new ExConfig();
+								new_config.project_id = project_id;
+								setExportConfig(new_config);
+								setIsOpenAddDialog(true);
+							}}
+						>
+							<AddIcon />
+						</IconButton>
 					</div>
 				</div>
 				<div style={{ overflow: 'auto' }}>
@@ -199,7 +210,7 @@ const ExportComponent: React.FC<IDefautProps, IDefautState> = (props) => {
 						</TableHead>
 					</Table>
 				</div>
-				<div style={{ overflow: 'auto', height: '150px' }}>
+				<div style={{ overflow: 'auto', height: '500px' }}>
 					<Table style={{ tableLayout: 'fixed' }}>
 						<TableBody>
 							{exportData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((exConfig, index) => (
@@ -224,7 +235,7 @@ const ExportComponent: React.FC<IDefautProps, IDefautState> = (props) => {
 											</IconButton>
 										</Tooltip>
 										<Tooltip title="Edit export config">
-											<IconButton aria-label="Edit" >
+											<IconButton aria-label="Edit">
 												<EditIcon />
 											</IconButton>
 										</Tooltip>
@@ -235,7 +246,6 @@ const ExportComponent: React.FC<IDefautProps, IDefautState> = (props) => {
 													e.stopPropagation();
 													setConfigDel(exConfig.name);
 													setSelectedExportConfig(exConfig);
-													console.log(exConfig);
 													setIsOpenDelDialog(true);
 												}}
 											>

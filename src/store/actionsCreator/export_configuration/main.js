@@ -1,25 +1,48 @@
-import * as actions from '../../actions/export_configuration' 
+import * as actions from '../../actions/export_configuration';
 import { getDataObject } from '@dgtx/coreui';
-import { callAPIGetDataExport, callAPICreateData, callAPIDeleteDataExport, callAPIUpdateData } from './call_api';
+import { callAPIGetDataExport, callAPICreateDataExport, callAPIDeleteDataExport, callAPIUpdateData } from './call_api';
 import { cloneDeep, isEmpty } from 'lodash';
 import { showNotification } from '@dgtx/coreui';
 
 export const getDataExport = (projectId: any) => async (dispatch: any) => {
 	const data = await dispatch(callAPIGetDataExport({ projectId }));
-	
-		dispatch({
-			type: actions.EXPORT_CONFIGURATION_GET_DATA,
-			payload: {
-				data: data,
-				refreshPage: false
-			},
-			meta: {
-				resource: actions.NAME_REDUCER
-			}
-		});
+
+	dispatch({
+		type: actions.EXPORT_CONFIGURATION_GET_DATA,
+		payload: {
+			data: data,
+			refreshPage: false
+		},
+		meta: {
+			resource: actions.NAME_REDUCER
+		}
+	});
 };
 
-// deleteDataTransform
+// createDataExport
+export const createDataExport = (exConfig: any) => async (dispatch: any) => {
+	const projectId = exConfig.project_id;
+	console.log({ exConfig });
+
+  await	dispatch(
+		callAPICreateDataExport({
+			data: exConfig,
+			projectId: projectId
+		})
+	);
+	await dispatch(getDataExport(projectId));
+	dispatch({
+		type: actions.EXPORT_CONFIGURATION_CREATE_DATA,
+		payload: {
+			exConfig
+		},
+		meta: {
+			resource: actions.NAME_REDUCER
+		}
+	});
+};
+
+// delete Data Export
 export const deleteDataExport = (exConfig: any) => async (dispatch: any) => {
 	const projectId = exConfig.project_id;
 	await dispatch(
@@ -39,6 +62,8 @@ export const deleteDataExport = (exConfig: any) => async (dispatch: any) => {
 		}
 	});
 };
+
+// open Dialog Export
 export const setIsOpenAddDialog = (value) => {
 	return {
 		type: actions.SET_IS_OPEN_ADD_DIALOG,
@@ -75,13 +100,13 @@ export const setIsOpenDelDialog = (value) => {
 	};
 };
 
-
+// close Dialog Export
 export const setIsCloseDialog = (value) => {
 	return {
 		type: actions.SET_IS_CLOSE_DIALOG,
 		payload: {
 			isOpenAdd: value,
-			isOpenView: value,
+			isOpenView: value
 			// isOpenEdit: value,
 			// config: new Config(),
 			// configValidators: default_configValidator
@@ -93,8 +118,6 @@ export const setIsCloseDialog = (value) => {
 };
 
 export const setExportConfig = (exConfig: any) => async (dispatch: any) => {
-	console.log({exConfig});
-	
 	dispatch({
 		type: actions.SET_EXPORT_CONFIG,
 		payload: {
@@ -107,7 +130,6 @@ export const setExportConfig = (exConfig: any) => async (dispatch: any) => {
 };
 
 export const setSelectedExportConfig = (exConfig: any) => async (dispatch: any) => {
-	console.log({exConfig});
 	dispatch({
 		type: actions.SET_SELECTED_EXPORT_CONFIG,
 		payload: {

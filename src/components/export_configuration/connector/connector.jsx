@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 import ExportComponent from '../components/export_component';
 import {
 	getDataExport,
+	createDataExport,
 	deleteDataExport,
 	setIsOpenAddDialog,
 	setIsOpenViewDialog,
@@ -11,7 +12,7 @@ import {
 	setSelectedExportConfig,
 	setIsOpenDelDialog,
 	setExportConfig
-} from '../../../store/actionsCreator/export_configuration ';
+} from '../../../store/actionsCreator/export_configuration';
 import Reducer from '../../../store/reducers/export_configuration_reducer';
 import * as constant from '../../../store/actions/export_configuration';
 interface LayoutDefautProps {
@@ -53,6 +54,7 @@ export default compose(
 		resources,
 		actions: {
 			getDataExport,
+			createDataExport,
 			setIsOpenAddDialog,
 			setIsCloseDialog,
 			setIsOpenViewDialog,

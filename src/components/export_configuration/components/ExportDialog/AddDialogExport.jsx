@@ -6,7 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import InputExport from './../input_export_component';
+import InputExport from '../input_export_component';
 const styles: any = (theme: any) => {
 	return {
 		showDialog: {
@@ -20,8 +20,13 @@ export interface IDefautProps {
 	theme?: any
 }
 const AddDialogExport: React.FC<IDefautProps> = (props) => {
-	const { classes, isOpen, setIsOpen, setIsCloseDialog, exConfig, setExportConfig } = props;
-	const [ cronValue, setCronValue ] = useState(' ');
+	const { classes, createDataExport, isOpen, setIsOpen, setIsCloseDialog, exConfig, setExportConfig } = props;
+	const [ cronValue, setCronValue ] = useState('');
+
+	const onSave = () => {
+		createDataExport(exConfig);
+	};
+
 	return (
 		<Dialog open={isOpen} onClose={() => setIsCloseDialog(false)} maxWidth="lg">
 			<DialogTitle className="tilte-dialog">{'Add Export Config'}</DialogTitle>
@@ -39,7 +44,7 @@ const AddDialogExport: React.FC<IDefautProps> = (props) => {
 				<Button onClick={() => setIsCloseDialog(false)} color="primary">
 					Cancel
 				</Button>
-				<Button color="primary" autoFocus>
+				<Button color="primary" autoFocus onClick={onSave}>
 					Save
 				</Button>
 			</DialogActions>
