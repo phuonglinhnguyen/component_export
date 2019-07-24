@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ExportFormatInput from './export_format_input';
 import ExportFormatList from './export_format_list';
-
+import { getDataField } from './test_field';
 const styles: any = (theme: any) => {
 	return {
 		wrapForm: {
@@ -35,15 +35,39 @@ export interface IDefautState {}
 const ExportFormat: React.FC<IDefautProps, IDefautState> = (props) => {
 	const { classes, exConfig, setExportConfig } = props;
 	const [ mode, setMode ] = useState('add');
-	console.log('exConfig Export Field', exConfig);
+	const [ exportFormatLists, setExportFormatLists ] = useState(() => {
+		return getDataField();
+	});
+	const [ formatItem, setFormatItem ] = useState(null);
+	const [ selectedFormatExport, setSelectedFormatExport ] = useState(null);
+	const exportFormat = get(exConfig, 'export_format', []);
 
 	return (
 		<Grid className={classes.wrapForm} spacing={24}>
 			<Grid item xs={12} md={6} className={classes.formControl1}>
-				<ExportFormatInput mode={mode} setMode={setMode} exConfig={exConfig} setExportConfig={setExportConfig} />
+				<ExportFormatInput
+					exportFormat={exportFormat}
+					mode={mode}
+					setMode={setMode}
+					exConfig={exConfig}
+					setExportConfig={setExportConfig}
+					formatItem={selectedFormatExport ? selectedFormatExport : formatItem}
+					setFormatItem={selectedFormatExport ? setSelectedFormatExport : setFormatItem}
+					setSelectedFormatExport={setSelectedFormatExport}
+					exportFormatLists={exportFormatLists}
+					setExportFormatLists={setExportFormatLists}
+				/>
 			</Grid>
 			<Grid item xs={12} md={6} className={classes.formControl}>
-				<ExportFormatList setMode={setMode} />
+				<ExportFormatList
+					setMode={setMode}
+					exportFormat={exportFormat}
+					exConfig={exConfig}
+					setExportConfig={setExportConfig}
+					setSelectedFormatExport={setSelectedFormatExport}
+					exportFormatLists={exportFormatLists}
+					setExportFormatLists={setExportFormatLists}
+				/>
 			</Grid>
 		</Grid>
 	);

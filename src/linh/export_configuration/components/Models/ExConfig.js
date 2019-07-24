@@ -7,7 +7,8 @@ class ExConfig {
 		this.collect_export_option = {
 			type: ''
 		};
-		this.export_format = [];
+		this.export_format = [
+		];
 	}
 }
 

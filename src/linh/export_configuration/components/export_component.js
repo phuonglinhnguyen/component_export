@@ -129,9 +129,9 @@ const ExportComponent: React.FC<IDefautProps, IDefautState> = (props) => {
 	const exportConfigs = data.data;
 	const [ selectedExportConfig ] = useState(null);
 	const [ strSearch, setStrSearch ] = useState(null);
-	const [ page, setPage ] = React.useState(0);
-	const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
-	const [ configDel, setConfigDel ] = React.useState('');
+	const [ page, setPage ] = useState(0);
+	const [ rowsPerPage, setRowsPerPage ] = useState(10);
+	const [ configDel, setConfigDel ] = useState('');
 	// =====Search
 	let searchTimeout = null;
 
@@ -227,6 +227,7 @@ const ExportComponent: React.FC<IDefautProps, IDefautState> = (props) => {
 											<IconButton
 												aria-label="View"
 												onClick={() => {
+								
 													setSelectedExportConfig(exConfig);
 													setIsOpenViewDialog(true);
 												}}

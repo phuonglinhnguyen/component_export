@@ -19,7 +19,7 @@ export interface IDefautProps {
 }
 const ViewDialog: React.FC<IDefautProps> = (props) => {
 	const { classes, isOpen, setIsOpen, exConfig, setExportConfig, setIsCloseDialog } = props;
-
+	
 	return (
 		<Dialog open={isOpen} onClose={() => setIsCloseDialog(false)} maxWidth="sm">
 			<DialogTitle className="tilte-dialog">{'View Export Config'}</DialogTitle>

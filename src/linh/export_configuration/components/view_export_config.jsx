@@ -46,8 +46,9 @@ export interface IDefautProps {
 }
 const ViewExportConfig: React.FC<IDefautProps> = (props) => {
 	const { classes, exConfig } = props;
-	const exportFormat = exConfig.export_format;
-	
+	const exportFormat = get(exConfig,'export_format',[]);
+
+	console.log({ exportFormat });
 	if (exConfig === null) return <div>Loading...</div>;
 	
 	return (

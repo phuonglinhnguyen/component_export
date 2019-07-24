@@ -24,7 +24,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 const styles: any = (theme: any) => {
 	return {
 		titleField: {
-			fontWeight: 'bold',
+			fontWeight: 'bold'
 		},
 		demo: {
 			backgroundColor: theme.palette.background.paper,
@@ -90,16 +90,49 @@ const styles: any = (theme: any) => {
 };
 
 export interface IDefautProps {
-	classes?: any,
-	
+	classes?: any
 }
-export interface IDefautState {
-
-}
+export interface IDefautState {}
 
 const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
-	const { classes } = props;
+	const {
+		classes,
+		setMode,
+		exConfig,
+		setExportConfig,
+		exportFormat,
+		setSelectedFormatExport,
+		exportFormatLists,
+		setExportFormatLists
+	} = props;
+	const [ isOpen, setIsOpen ] = useState(false);
+	const [ delFormatItem, setDelFormatItem ] = useState('');
+	const [ strSearch, setStrSearch ] = useState(null);
+	let searchTimeout = null;
 
+	const onChangeSearch = (e) => {
+		const value = e.target.value;
+		if (searchTimeout) {
+			clearTimeout(searchTimeout);
+		}
+		searchTimeout = setTimeout(() => {
+			setStrSearch(value);
+		}, 500);
+	};
+
+	const formatData = filter(exportFormat, (formatItem) => {
+		if (isEmpty(strSearch)) {
+			return true;
+		}
+		const strToSearch = formatItem.type.toLowerCase();
+		return strToSearch.indexOf(strSearch.toLowerCase()) + 1;
+	});
+
+	const deleteFormatItem = (fileName) => {
+		const newFormat = exportFormat.filter((formatItem) => formatItem.fileName !== fileName);
+		const updateConfig = { ...exConfig, export_format: newFormat };
+		setExportConfig(updateConfig);
+	};
 	return (
 		<React.Fragment>
 			<div className={classes.customSearch}>
@@ -114,34 +147,43 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 							root: classes.inputRoot,
 							input: classes.inputInput
 						}}
-						// onChange={onChangeSearch}
+						onChange={onChangeSearch}
 					/>
 				</div>
 			</div>
 
 			<div className={classes.demo}>
-				{/* <List dense={dense}>
-					{dictData.map((dict_item) => {
+				<List>
+					{exportFormatLists.map((formatItem) => {
 						return (
 							<ListItem
-								key={dict_item.id}
+								key={formatItem.id}
 								className={classes.selectList}
 								onClick={() => {
-									setSelectedDictItem(dict_item);
-									setNull();
+									setSelectedFormatExport(formatItem);
+									console.log({formatItem})
+									// setNull();
 									setMode('edit');
 								}}
 							>
 								<ListItemIcon>
 									<FolderIcon />
 								</ListItemIcon>
-								<ListItemText primary={dict_item.fieldKey} secondary={dict_item.username} />
+								<ListItemText primary={formatItem.fileName} secondary={formatItem.type} />
 								<ListItemSecondaryAction>
-									<IconButton aria-label="Delete" onClick={() => setIsOpen(true)}>
+									<IconButton
+										aria-label="Delete"
+										onClick={() => {
+											setIsOpen(true);
+											setDelFormatItem(formatItem.fileName);
+										}}
+									>
 										<DeleteIcon />
 									</IconButton>
 									<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-										<DialogContent>Delete Dict? </DialogContent>
+										<DialogContent>
+											Delete <span style={{ color: 'red', fontWeight: 'bolder' }}>{delFormatItem}</span>?{' '}
+										</DialogContent>
 
 										<DialogActions>
 											<Button onClick={() => setIsOpen(false)} color="primary">
@@ -150,7 +192,7 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 											<Button
 												onClick={(e) => {
 													e.stopPropagation();
-													deleteDict(dict_item.fieldKey);
+													deleteFormatItem(delFormatItem);
 													setIsOpen(false);
 												}}
 												color="primary"
@@ -164,7 +206,7 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 							</ListItem>
 						);
 					})}
-				</List> */}
+				</List>
 			</div>
 		</React.Fragment>
 	);

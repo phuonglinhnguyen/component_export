@@ -147,7 +147,7 @@ const InputComponent: React.FC<IDefautProps> = (props) => {
 					<TextField
 						type="number"
 						defaultValue="1"
-						name="numberFile"
+						name="number_of_files"
 						label="Number of Files"
 						className={classes.textField}
 						margin="dense"

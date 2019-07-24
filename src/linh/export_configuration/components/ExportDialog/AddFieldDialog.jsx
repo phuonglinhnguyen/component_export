@@ -20,7 +20,41 @@ export interface IDefautProps {
 	theme?: any
 }
 const AddFieldDialog: React.FC<IDefautProps> = (props) => {
-	const { classes, isOpen, setIsOpen } = props;
+	const {
+		classes,
+		isOpen,
+		setIsOpen,
+		fieldItem,
+		setFieldItem,
+		setExportFormatLists,
+		exportFormatLists,
+		fields_export,
+		formatItem,
+		setFormatItem
+	} = props;
+
+	const onChangeText = (e) => {
+		const name = e.target.name;
+		const value = e.target.value;
+
+		setFieldItem({
+			...fieldItem,
+			[name]: value
+		});
+	};
+
+	const onAddField = () => {
+		const newField = { ...fieldItem };
+		setFormatItem({
+			...formatItem, 
+			fields_export:{
+				newField
+			}
+			
+		})
+		console.log({ formatItem });
+
+	};
 
 	return (
 		<Dialog open={isOpen} onClose={() => setIsOpen(false)} maxWidth="lg">
@@ -30,17 +64,19 @@ const AddFieldDialog: React.FC<IDefautProps> = (props) => {
 					required
 					label="Field Name"
 					className={classes.textField}
-					name="fieldName"
+					name="name"
 					margin="dense"
 					variant="outlined"
+					onChange={onChangeText}
 				/>
 				<TextField
 					required
 					label="Field Value"
 					className={classes.textField}
-					name="fieldValue"
+					name="value"
 					margin="dense"
 					variant="outlined"
+					onChange={onChangeText}
 				/>
 			</DialogContent>
 
@@ -48,8 +84,14 @@ const AddFieldDialog: React.FC<IDefautProps> = (props) => {
 				<Button onClick={() => setIsOpen(false)} color="primary">
 					Cancel
 				</Button>
-				<Button onClick={() => setIsOpen(false)} color="primary">
-					Update
+				<Button
+					color="primary"
+					onClick={() => {
+						onAddField();
+						setIsOpen(false);
+					}}
+				>
+					Add
 				</Button>
 			</DialogActions>
 		</Dialog>

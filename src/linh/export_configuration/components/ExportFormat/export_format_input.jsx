@@ -27,9 +27,6 @@ const styles: any = (theme: any) => {
 			marginRight: '20px',
 			width: '100px'
 		},
-		// textField1: {
-		// 	width: '70%'
-		// },
 		add: {
 			background: '#3f51b5',
 			color: '#fafafa',
@@ -86,7 +83,20 @@ export interface IDefautProps {
 export interface IDefautState {}
 
 const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
-	const { classes, mode, setMode, exConfig, setExportConfig } = props;
+	const {
+		classes,
+		mode,
+		setMode,
+		exConfig,
+		setExportConfig,
+		exportFormat,
+		formatItem,
+		setFormatItem,
+		exportFormatLists,
+		setExportFormatLists
+	} = props;
+
+	console.log({ exportFormatLists });
 	const typeEF = [
 		{ label: 'csv', value: 'csv' },
 		{ label: 'xml', value: 'xml' },
@@ -97,16 +107,41 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 	const onChangeText = (e) => {
 		const name = e.target.name;
 		const value = e.target.value;
-		console.log('value Type', value);
 
-		setExportConfig({
-			...exConfig,
+		setFormatItem({
+			...formatItem,
 			[name]: value
 		});
 	};
 
+	const onAdd = () => {
+		if (mode === 'add') {
+			const newFormatItem = { ...formatItem };
+
+			setExportConfig({
+				...exConfig,
+				export_format: [ ...exConfig.export_format, newFormatItem ]
+			});
+			setFormatItem(null);
+		} else if (mode === 'edit') {
+			const newExportFormat = exportFormat.map((_formatItem) => {
+				if (_formatItem.type === formatItem.type) {
+					return { ...formatItem };
+				}
+				return _formatItem;
+			});
+			setExportConfig({
+				...exConfig,
+				export_format: newExportFormat
+			});
+			setMode('add');
+			setFormatItem(null);
+		}
+	};
+
 	const onCancel = () => {
 		setMode('add');
+		setFormatItem(null);
 	};
 
 	return (
@@ -122,12 +157,7 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 					>
 						{mode === 'add' ? '' : <CancelIcon />}
 					</Fab>
-					<Fab
-						size="small"
-						aria-label="Add"
-						className={mode === 'add' ? classes.add : classes.save}
-						// onClick={onAddDictionary}
-					>
+					<Fab size="small" aria-label="Add" className={mode === 'add' ? classes.add : classes.save} onClick={onAdd}>
 						{mode === 'add' ? <AddIcon /> : <DoneIcon />}
 					</Fab>
 				</div>
@@ -143,7 +173,7 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 						label="Type"
 						margin="dense"
 						onChange={onChangeText}
-						// value={}
+						value={formatItem && formatItem.type ? formatItem.type : ''}
 					>
 						{typeEF.map((option) => (
 							<MenuItem key={option.value} value={option.value}>
@@ -158,11 +188,20 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 						margin="dense"
 						variant="outlined"
 						onChange={onChangeText}
+						value={formatItem && formatItem.fileName ? formatItem.fileName : ''}
 					/>
 				</div>
 
 				<div className={classes.formInput}>
-					<ExportField />
+					<ExportField
+						formatItem={formatItem}
+						setFormatItem={setFormatItem}
+						exportFormatLists={exportFormatLists}
+						setExportFormatLists={setExportFormatLists}
+						exportFormat={exportFormat}
+						exConfig={exConfig}
+						setExportConfig={setExportConfig}
+					/>
 				</div>
 			</div>
 		</React.Fragment>
