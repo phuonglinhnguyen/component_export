@@ -100,10 +100,8 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 		setMode,
 		exConfig,
 		setExportConfig,
-		exportFormat,
-		setSelectedFormatExport,
-		exportFormatLists,
-		setExportFormatLists
+		setSelectedFormatItem,
+		exportFormats,
 	} = props;
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ delFormatItem, setDelFormatItem ] = useState('');
@@ -120,7 +118,7 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 		}, 500);
 	};
 
-	const formatData = filter(exportFormat, (formatItem) => {
+	const formatData = filter(exportFormats, (formatItem) => {
 		if (isEmpty(strSearch)) {
 			return true;
 		}
@@ -129,7 +127,7 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 	});
 
 	const deleteFormatItem = (fileName) => {
-		const newFormat = exportFormat.filter((formatItem) => formatItem.fileName !== fileName);
+		const newFormat = exportFormats.filter((formatItem) => formatItem.fileName !== fileName);
 		const updateConfig = { ...exConfig, export_format: newFormat };
 		setExportConfig(updateConfig);
 	};
@@ -153,16 +151,14 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 			</div>
 
 			<div className={classes.demo}>
-				<List>
-					{exportFormatLists.map((formatItem) => {
+				<List >
+					{formatData.map((formatItem) => {
 						return (
 							<ListItem
 								key={formatItem.id}
 								className={classes.selectList}
 								onClick={() => {
-									setSelectedFormatExport(formatItem);
-									console.log({formatItem})
-									// setNull();
+									setSelectedFormatItem(formatItem);
 									setMode('edit');
 								}}
 							>

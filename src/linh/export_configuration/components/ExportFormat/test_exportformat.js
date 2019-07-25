@@ -1,4 +1,4 @@
-export const getDataField = () => {
+export const getDataExportFormat = () => {
 	return [
 		{
 			type: 'csv',

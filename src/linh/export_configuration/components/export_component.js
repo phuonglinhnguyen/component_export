@@ -227,7 +227,7 @@ const ExportComponent: React.FC<IDefautProps, IDefautState> = (props) => {
 											<IconButton
 												aria-label="View"
 												onClick={() => {
-								
+													console.log({ exConfig });
 													setSelectedExportConfig(exConfig);
 													setIsOpenViewDialog(true);
 												}}

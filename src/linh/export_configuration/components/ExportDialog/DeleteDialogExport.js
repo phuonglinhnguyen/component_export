@@ -2,7 +2,7 @@ import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { KEY_TRANSLATE } from '../../../../store/actions/export_configuration';
 import { withStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -15,8 +15,9 @@ export interface IDefautProps {
 	theme?: any,
 	isOpen?: any,
 	setIsOpen?: any,
-	deleteData?: any,
-	config?: any
+	deleteDataExport?: any,
+	exConfig?: any,
+	configDel?: any
 }
 const DeleteDialogExport: React.FC<IDefautProps> = (props) => {
 	const { isOpen, setIsOpen, deleteDataExport, exConfig, configDel } = props;

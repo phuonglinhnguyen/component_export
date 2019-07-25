@@ -1,26 +1,36 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
 import InputExport from '../input_export_component';
+
 const styles: any = (theme: any) => {
-	return {
-		showDialog: {
-			maxWidth: '1200px'
-		}
-	};
+	return {};
 };
+
 export interface IDefautProps {
 	classes?: any,
 	styles?: any,
-	theme?: any
+	theme?: any,
+	exConfig?: any,
+	setExportConfig?: any,
+	createDataExport?: any,
+	isOpen?: any,
+	setIsCloseDialog?: any
 }
-const AddDialogExport: React.FC<IDefautProps> = (props) => {
-	const { classes, createDataExport, isOpen, setIsOpen, setIsCloseDialog, exConfig, setExportConfig } = props;
+
+export interface IDefautState {
+	cronValue?: any,
+	setCronValue?: any
+}
+
+const AddDialogExport: React.FC<IDefautProps, IDefautState> = (props) => {
+	const { exConfig, setExportConfig, createDataExport, isOpen, setIsCloseDialog } = props;
 	const [ cronValue, setCronValue ] = useState('');
 
 	const onSave = () => {
@@ -39,7 +49,6 @@ const AddDialogExport: React.FC<IDefautProps> = (props) => {
 					{...props}
 				/>
 			</DialogContent>
-
 			<DialogActions>
 				<Button onClick={() => setIsCloseDialog(false)} color="primary">
 					Cancel

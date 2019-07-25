@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import get from 'lodash/get';
 import { isEmpty } from 'lodash';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -9,15 +8,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
-import { Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import FolderIcon from '@material-ui/icons/Folder';
 import { CronTriggerQuartz } from '@dgtx/core-component-ui';
 import { getTimeByCronValue } from '@dgtx/core-component-ui';
 import ExportFormat from './ExportFormat';
@@ -54,12 +46,16 @@ const styles: any = (theme: any) => {
 export interface IDefautProps {
 	classes?: any,
 	styles?: any,
-	theme?: any
+	theme?: any,
+	exConfig?: any,
+	setExportConfig?: any
 }
 const InputComponent: React.FC<IDefautProps> = (props) => {
 	const { classes, exConfig, setExportConfig } = props;
+
 	const [ statusCron, setStatusCron ] = useState('');
 	const [ type, setType ] = useState('DOC');
+
 	const cronTrigger = exConfig ? exConfig.cron_trigger : '';
 
 	const handleChangeCron = (cronValue) => {
@@ -125,7 +121,7 @@ const InputComponent: React.FC<IDefautProps> = (props) => {
 					<div>
 						<TextField
 							required
-							name="file"
+							name="export_destination"
 							label="Export Destination"
 							placeholder="//PATH"
 							fullWidth="true"

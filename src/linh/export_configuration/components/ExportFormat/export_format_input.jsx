@@ -89,14 +89,13 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 		setMode,
 		exConfig,
 		setExportConfig,
-		exportFormat,
 		formatItem,
 		setFormatItem,
-		exportFormatLists,
-		setExportFormatLists
+		exportFormats,
+		typeExportFormat,
+		setTypeExportFormat
 	} = props;
 
-	console.log({ exportFormatLists });
 	const typeEF = [
 		{ label: 'csv', value: 'csv' },
 		{ label: 'xml', value: 'xml' },
@@ -113,18 +112,23 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 			[name]: value
 		});
 	};
+	const onChangeTextType = (name, value) => {
+		setFormatItem({
+			...formatItem,
+			[name]: value
+		});
+	};
 
-	const onAdd = () => {
+	const onAddTest = () => {
 		if (mode === 'add') {
 			const newFormatItem = { ...formatItem };
-
 			setExportConfig({
 				...exConfig,
-				export_format: [ ...exConfig.export_format, newFormatItem ]
+				export_format: [ ...exportFormats, newFormatItem ]
 			});
 			setFormatItem(null);
 		} else if (mode === 'edit') {
-			const newExportFormat = exportFormat.map((_formatItem) => {
+			const newExportFormat = exportFormats.map((_formatItem) => {
 				if (_formatItem.type === formatItem.type) {
 					return { ...formatItem };
 				}
@@ -143,6 +147,7 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 		setMode('add');
 		setFormatItem(null);
 	};
+	console.log({ formatItem });
 
 	return (
 		<React.Fragment>
@@ -157,7 +162,12 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 					>
 						{mode === 'add' ? '' : <CancelIcon />}
 					</Fab>
-					<Fab size="small" aria-label="Add" className={mode === 'add' ? classes.add : classes.save} onClick={onAdd}>
+					<Fab
+						size="small"
+						aria-label="Add"
+						className={mode === 'add' ? classes.add : classes.save}
+						onClick={onAddTest}
+					>
 						{mode === 'add' ? <AddIcon /> : <DoneIcon />}
 					</Fab>
 				</div>
@@ -172,8 +182,15 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 						variant="outlined"
 						label="Type"
 						margin="dense"
-						onChange={onChangeText}
-						value={formatItem && formatItem.type ? formatItem.type : ''}
+						onChange={(e) => {
+							onChangeTextType(e.target.name, e.target.value);
+							if (e.target.value === 'csv' || e.target.value === 'db3') {
+								setTypeExportFormat('csv/db3');
+							} else if (e.target.value === 'json' || e.target.value === 'xml') {
+								setTypeExportFormat('json/xml');
+							}
+						}}
+						value={formatItem && formatItem.type ? formatItem.type : 'csv'}
 					>
 						{typeEF.map((option) => (
 							<MenuItem key={option.value} value={option.value}>
@@ -196,15 +213,22 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 					<ExportField
 						formatItem={formatItem}
 						setFormatItem={setFormatItem}
-						exportFormatLists={exportFormatLists}
-						setExportFormatLists={setExportFormatLists}
-						exportFormat={exportFormat}
+						exportFormats={exportFormats}
 						exConfig={exConfig}
 						setExportConfig={setExportConfig}
+						typeExportFormat={typeExportFormat}
+						setTypeExportFormat={setTypeExportFormat}
 					/>
 				</div>
 			</div>
 		</React.Fragment>
 	);
 };
+
+ExportFormatInput.defaultProps = {
+	formatItem: {
+		type: 'xml'
+	}
+};
+
 export default withStyles(styles, { withTheme: true })(ExportFormatInput);

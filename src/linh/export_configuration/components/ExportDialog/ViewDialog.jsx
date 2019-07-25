@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react'; 
 import { withStyles } from '@material-ui/core/styles';
 
 import { Button } from '@material-ui/core';
@@ -8,24 +8,24 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ViewExport from '../view_export_config';
 const styles: any = (theme: any) => {
-	return {
-	
-	};
+	return {};
 };
 export interface IDefautProps {
 	classes?: any,
 	styles?: any,
-	theme?: any
+	theme?: any,
+	setExportConfig?: any,
+	setIsCloseDialog?: any
 }
 const ViewDialog: React.FC<IDefautProps> = (props) => {
-	const { classes, isOpen, setIsOpen, exConfig, setExportConfig, setIsCloseDialog } = props;
-	
+	const { isOpen, exConfig, setExportConfig, setIsCloseDialog } = props;
+
 	return (
 		<Dialog open={isOpen} onClose={() => setIsCloseDialog(false)} maxWidth="sm">
 			<DialogTitle className="tilte-dialog">{'View Export Config'}</DialogTitle>
 			<DialogContent>
-        <ViewExport exConfig={exConfig} setExportConfig={setExportConfig}/>
-      </DialogContent>
+				<ViewExport exConfig={exConfig} setExportConfig={setExportConfig} />
+			</DialogContent>
 
 			<DialogActions>
 				<Button onClick={() => setIsCloseDialog(false)} color="primary">
