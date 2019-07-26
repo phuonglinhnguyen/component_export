@@ -64,14 +64,6 @@ export const getDataExportFieldChilds = () => {
 		{
 			name: 'payment',
 			value: 'H9'
-		},
-		{
-			name: 'awning',
-			value: 'H35'
-		},
-		{
-			name: 'accessibility',
-			value: 'H37'
 		}
 	];
 };

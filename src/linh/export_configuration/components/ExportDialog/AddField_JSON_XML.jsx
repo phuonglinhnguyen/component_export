@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
 import { Button } from '@material-ui/core';
@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 const styles: any = (theme: any) => {
 	return {
-		childs:{
+		childs: {
 			paddingLeft: '40px'
 		}
 	};
@@ -32,45 +32,62 @@ const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
 		fieldItemChild,
 		setFieldItemChild,
 		typeFieldChild,
-		setTypeFieldChild
+		setTypeFieldChild,
+		setFieldItem,
+		fieldItem
 	} = props;
 
 	const typeChild = [ { label: 'FieldItemChild', value: 'fieldChild' }, { label: 'FieldItem', value: 'field' } ];
 
-	const onChangeText = (e) => {
+	const [ childItem, setChildItem ] = useState(null);
+	const onChangeTextFieldChild = (e) => {
 		const name = e.target.name;
 		const value = e.target.value;
-
 		setFieldItemChild({
 			...fieldItemChild,
 			[name]: value
 		});
 	};
-	const onChangeTextType = (name, value) => {
-		setFieldItemChild({
-			...fieldItemChild,
+	const onChangeTextChild = (e) => {
+		const name = e.target.name;
+		const value = e.target.value;
+		setChildItem({
+			...childItem,
+			[name]: value
+		});
+	};
+
+	const onChangeText = (e) => {
+		const name = e.target.name;
+		const value = e.target.value;
+		setFieldItem({
+			...fieldItem,
 			[name]: value
 		});
 	};
 
 	const onAddFieldChild = () => {
-		const newField = { ...fieldItemChild };
-		setExportFieldChilds([ ...exportFieldChilds, newField ]);
+		if (typeFieldChild === 'field') {
+			const newField = { ...fieldItem };
+			setExportFieldChilds([ newField, ...exportFieldChilds ]);
+		} else if (typeFieldChild === 'fieldChild') {
+			const newFieldChild = { ...childItem };
+			let new_field_item = {
+				...fieldItemChild,
+				childs: newFieldChild
+			};
+			setExportFieldChilds([ new_field_item, ...exportFieldChilds ]);
+			setTypeFieldChild('field');
+		}
 	};
+
+	console.log({ fieldItemChild });
+	console.log({ exportFieldChilds });
 
 	return (
 		<Dialog open={isOpen} onClose={() => setIsOpen(false)} maxWidth="lg">
 			<DialogTitle className="tilte-dialog">{'Add Field JSON/XML'}</DialogTitle>
 			<DialogContent>
-				<TextField
-					required
-					label="Field Name"
-					className={classes.textField}
-					name="name"
-					margin="dense"
-					variant="outlined"
-					onChange={onChangeText}
-				/>
 				<TextField
 					required
 					name="typeChild"
@@ -80,7 +97,6 @@ const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
 					label="Type Child"
 					margin="dense"
 					onChange={(e) => {
-						onChangeTextType(e.target.name, e.target.value);
 						if (e.target.value === 'field') {
 							setTypeFieldChild('field');
 						} else if (e.target.value === 'fieldChild') {
@@ -96,25 +112,45 @@ const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
 					))}
 				</TextField>
 				{typeFieldChild === 'field' ? (
-					<TextField
-						required
-						label="Field Value"
-						className={classes.textField}
-						name="childs"
-						margin="dense"
-						variant="outlined"
-						onChange={onChangeText}
-					/>
+					<div>
+						<TextField
+							required
+							label="Field Name"
+							className={classes.textField}
+							name="name"
+							margin="dense"
+							variant="outlined"
+							onChange={onChangeText}
+						/>
+						<TextField
+							required
+							label="Field Value"
+							className={classes.textField}
+							name="value"
+							margin="dense"
+							variant="outlined"
+							onChange={onChangeText}
+						/>
+					</div>
 				) : (
 					<div className={classes.childs}>
 						<TextField
 							required
-							label="Field Name Child"
+							label="Field Name"
 							className={classes.textField}
-							name="childs"
+							name="name"
 							margin="dense"
 							variant="outlined"
-							onChange={onChangeText}
+							onChange={onChangeTextFieldChild}
+						/>
+						<TextField
+							required
+							label="Field Name Child"
+							className={classes.textField}
+							name="name"
+							margin="dense"
+							variant="outlined"
+							onChange={onChangeTextChild}
 						/>
 					</div>
 				)}

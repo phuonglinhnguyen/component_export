@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
-import filter from 'lodash/filter';
-import isEmpty from 'lodash/isEmpty';
+import { isEmpty, filter, get } from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import { Translate } from 'react-redux-i18n';
 import { KEY_TRANSLATE } from '../../../../store/actions/tranform_configuration';
-import ListItemText from '@material-ui/core/ListItemText';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
-import { AddField_CSV_DB3, AddField_JSON_XML } from './../ExportDialog';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import get from 'lodash/get';
+
 import { getDataExportFieldChilds } from './test_exportfield_child';
+import { AddField_CSV_DB3, AddField_JSON_XML } from './../ExportDialog';
+import Childs from './childs';
 const styles: any = (theme: any) => {
 	return {
 		exportField: {
@@ -43,9 +44,6 @@ const styles: any = (theme: any) => {
 		nested: {
 			paddingLeft: '40px'
 		},
-		nested1: {
-			paddingLeft: '80px'
-		},
 		subHeader: {
 			fontWeight: 'bold',
 			fontSize: '15px',
@@ -68,17 +66,13 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 	const [ exportFieldChilds, setExportFieldChilds ] = useState(() => {
 		return getDataExportFieldChilds();
 	});
-	const [ typeFieldChild, setTypeFieldChild] = useState('field');
+	const [ typeFieldChild, setTypeFieldChild ] = useState('field');
 	const [ open, setOpen ] = useState(true);
-	const [ open1, setOpen1 ] = useState(true);
+	const [ selectedFieldItem, setSelectedFieldItem ] = useState(null);
 	const exportFields = get(formatItem, 'fields_export', []);
 
 	const handleClick = () => {
 		setOpen(!open);
-	};
-
-	const handleClick1 = () => {
-		setOpen1(!open1);
 	};
 
 	return (
@@ -153,7 +147,15 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 							{exportFieldChilds.map((fieldItem) => {
 								return (
 									<div>
-										<ListItem button onClick={handleClick} className={classes.listItem}>
+										<ListItem
+											button
+											onClick={() => {
+												handleClick();
+												setSelectedFieldItem(fieldItem);
+												console.log({ fieldItem });
+											}}
+											className={classes.listItem}
+										>
 											{open ? <ExpandLess /> : <ExpandMore />}
 											<ListItemText primary={fieldItem.name} secondary={fieldItem.value} />
 
@@ -169,6 +171,7 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 												</IconButton>
 											</ListItemSecondaryAction>
 										</ListItem>
+										{fieldItem.childs ? <Childs openChild={open}  /> : ''}
 									</div>
 								);
 							})}
@@ -179,7 +182,6 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 			<AddField_CSV_DB3
 				{...props}
 				exportFields={exportFields}
-				formatItem={formatItem}
 				isOpen={isOpenAddFieldCSV}
 				setIsOpen={setIsOpenAddFieldCSV}
 				fieldItem={fieldItem}
@@ -195,6 +197,8 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 				setExportFieldChilds={setExportFieldChilds}
 				typeFieldChild={typeFieldChild}
 				setTypeFieldChild={setTypeFieldChild}
+				fieldItem={fieldItem}
+				setFieldItem={setFieldItem}
 			/>
 		</React.Fragment>
 	);
