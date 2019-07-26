@@ -147,7 +147,6 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 		setMode('add');
 		setFormatItem(null);
 	};
-	console.log({ formatItem });
 
 	return (
 		<React.Fragment>

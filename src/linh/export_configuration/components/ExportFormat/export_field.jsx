@@ -48,6 +48,9 @@ const styles: any = (theme: any) => {
 			fontWeight: 'bold',
 			fontSize: '15px',
 			borderBottom: '2px solid lavender'
+		},
+		childItem: {
+			display: 'flex'
 		}
 	};
 };
@@ -67,8 +70,9 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 		return getDataExportFieldChilds();
 	});
 	const [ typeFieldChild, setTypeFieldChild ] = useState('field');
-	const [ open, setOpen ] = useState(true);
+	const [ open, setOpen ] = useState(false);
 	const [ selectedFieldItem, setSelectedFieldItem ] = useState(null);
+	const [ selectedFieldChildItem, setSelectedFieldChildItem ] = useState(null);
 	const exportFields = get(formatItem, 'fields_export', []);
 
 	const handleClick = () => {
@@ -104,7 +108,13 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 						>
 							{exportFields.map((fieldItem) => {
 								return (
-									<ListItem button onClick={handleClick} className={classes.listItem}>
+									<ListItem
+										button
+										onClick={() => {
+											setSelectedFieldItem(fieldItem);
+										}}
+										className={classes.listItem}
+									>
 										<ListItemText primary={fieldItem.name} secondary={fieldItem.value} />
 
 										<ListItemSecondaryAction className={classes.hiddenActions}>
@@ -150,28 +160,57 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 										<ListItem
 											button
 											onClick={() => {
-												handleClick();
-												setSelectedFieldItem(fieldItem);
-												console.log({ fieldItem });
+												if (!isEmpty(fieldItem.childs)) {
+													setSelectedFieldItem(fieldItem);
+													setOpen(!open);
+												} else {
+													setSelectedFieldItem(fieldItem);
+												}
 											}}
 											className={classes.listItem}
 										>
-											{open ? <ExpandLess /> : <ExpandMore />}
-											<ListItemText primary={fieldItem.name} secondary={fieldItem.value} />
-
-											<ListItemSecondaryAction className={classes.hiddenActions}>
-												<IconButton aria-label="Add" onClick={() => setIsOpenAddFieldJSON(true)}>
-													<AddIcon />
-												</IconButton>
-												<IconButton aria-label="Edit" onClick={() => setIsOpenAddFieldJSON(true)}>
-													<EditIcon />
-												</IconButton>
-												<IconButton aria-label="Delete" onClick={() => setIsOpenAddFieldJSON(true)}>
-													<DeleteIcon />
-												</IconButton>
-											</ListItemSecondaryAction>
+											{fieldItem.childs ? (
+												<div className={classes.childItem}>
+													{open ? <ExpandLess /> : <ExpandMore />}
+													<ListItemText primary={fieldItem.name} secondary={fieldItem.value} />
+													<ListItemSecondaryAction className={classes.hiddenActions}>
+														<IconButton aria-label="Edit" onClick={() => setIsOpenAddFieldJSON(true)}>
+															<EditIcon />
+														</IconButton>
+														<IconButton aria-label="Delete" onClick={() => setIsOpenAddFieldJSON(true)}>
+															<DeleteIcon />
+														</IconButton>
+													</ListItemSecondaryAction>
+												</div>
+											) : (
+												<div>
+													<ListItemText primary={fieldItem.name} secondary={fieldItem.value} />
+													<ListItemSecondaryAction className={classes.hiddenActions}>
+														<IconButton aria-label="Edit" onClick={() => setIsOpenAddFieldJSON(true)}>
+															<EditIcon />
+														</IconButton>
+														<IconButton aria-label="Delete" onClick={() => setIsOpenAddFieldJSON(true)}>
+															<DeleteIcon />
+														</IconButton>
+													</ListItemSecondaryAction>
+												</div>
+											)}
 										</ListItem>
-										{fieldItem.childs ? <Childs openChild={open}  /> : ''}
+										{fieldItem.childs ? (
+											<div>
+												<Childs
+													openChild={open}
+													fieldItem={fieldItem}
+													setFieldItem={setFieldItem}
+													typeFieldChild={typeFieldChild}
+													setTypeFieldChild={setTypeFieldChild}
+													fieldItemChild={fieldItemChild}
+													setFieldItemChild={setFieldItemChild}
+												/>
+											</div>
+										) : (
+											''
+										)}
 									</div>
 								);
 							})}

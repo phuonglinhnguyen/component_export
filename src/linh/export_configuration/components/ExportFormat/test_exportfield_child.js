@@ -19,7 +19,7 @@ export const getDataExportFieldChilds = () => {
 		{
 			name: 'cat',
 			childs: {
-				name: 'child_node',
+				name: 'child_linh',
 				fields: [
 					{
 						name: 'terrace',

@@ -20,15 +20,13 @@ export interface IDefautProps {
 	styles?: any,
 	theme?: any
 }
-const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
+const AddFieldChild: React.FC<IDefautProps> = (props) => {
 	const {
 		classes,
 		exportFieldChilds,
 		setExportFieldChilds,
 		isOpen,
 		setIsOpen,
-		formatItem,
-		setFormatItem,
 		fieldItemChild,
 		setFieldItemChild,
 		typeFieldChild,
@@ -43,11 +41,14 @@ const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
 	const onChangeTextFieldChild = (e) => {
 		const name = e.target.name;
 		const value = e.target.value;
+		console.log({value});
+		
 		setFieldItemChild({
 			...fieldItemChild,
 			[name]: value
 		});
 	};
+	
 	const onChangeTextChild = (e) => {
 		const name = e.target.name;
 		const value = e.target.value;
@@ -69,20 +70,23 @@ const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
 	const onAddFieldChild = () => {
 		if (typeFieldChild === 'field') {
 			const newField = { ...fieldItem };
-			setExportFieldChilds([ newField, ...exportFieldChilds ]);
+			console.log({newField});
+			// setExportFieldChilds([ newField, ...exportFieldChilds ]);
 		} else if (typeFieldChild === 'fieldChild') {
 			const newFieldChild = { ...childItem };
 			let new_field_item = {
 				...fieldItemChild,
 				childs: newFieldChild
 			};
-			setExportFieldChilds([ new_field_item, ...exportFieldChilds ]);
-			setTypeFieldChild('field');
+			console.log({new_field_item});
+			
+			// setExportFieldChilds([ new_field_item, ...exportFieldChilds ]);
+			// setTypeFieldChild('field');
 		}
 	};
 	return (
 		<Dialog open={isOpen} onClose={() => setIsOpen(false)} maxWidth="lg">
-			<DialogTitle className="tilte-dialog">{'Add Field JSON/XML'}</DialogTitle>
+			<DialogTitle className="tilte-dialog">{'Add Field Childs'}</DialogTitle>
 			<DialogContent>
 				<TextField
 					required
@@ -170,4 +174,4 @@ const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
 	);
 };
 
-export default withStyles(styles, { withTheme: true })(AddField_JSON_XML);
+export default withStyles(styles, { withTheme: true })(AddFieldChild);
