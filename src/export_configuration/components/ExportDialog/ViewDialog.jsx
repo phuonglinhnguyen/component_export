@@ -1,50 +1,39 @@
-import React, { useState } from "react";
-import { withStyles } from "@material-ui/core/styles";
+import React from 'react'; 
+import { withStyles } from '@material-ui/core/styles';
 
-import { Button } from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-
+import { Button } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import ViewExport from '../view_export_config';
 const styles: any = (theme: any) => {
-  return {
-    showDialog: {
-      maxWidth: "1200px"
-    }
-  };
+	return {};
 };
 export interface IDefautProps {
-  classes?: any;
-  styles?: any;
-  theme?: any;
+	classes?: any,
+	styles?: any,
+	theme?: any,
+	setExportConfig?: any,
+	setIsCloseDialog?: any
 }
-const ViewDialog: React.FC<IDefautProps> = props => {
-  const { classes, isOpen, setIsOpen } = props;
+const ViewDialog: React.FC<IDefautProps> = (props) => {
+	const { isOpen, exConfig, setExportConfig, setIsOpen} = props;
 
-  return (
-    <Dialog
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      maxWidth="lg"
-    >
-      <DialogTitle className="tilte-dialog">
-        {"View Export Config"}
-      </DialogTitle>
-      <DialogContent>
-        View
-      </DialogContent>
+	return (
+		<Dialog open={isOpen} onClose={() => setIsOpen(false)} maxWidth="sm">
+			<DialogTitle className="tilte-dialog">{'View Export Config'}</DialogTitle>
+			<DialogContent>
+				<ViewExport exConfig={exConfig} setExportConfig={setExportConfig} />
+			</DialogContent>
 
-      <DialogActions>
-        <Button onClick={() => setIsOpen(false)} color="primary">
-          Cancel
-        </Button>
-        <Button color="primary" autoFocus>
-          Save
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+			<DialogActions>
+				<Button onClick={() => setIsOpen(false)} color="primary">
+					Cancel
+				</Button>
+			</DialogActions>
+		</Dialog>
+	);
 };
 
 export default withStyles(styles, { withTheme: true })(ViewDialog);

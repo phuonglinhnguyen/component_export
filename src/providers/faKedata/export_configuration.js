@@ -11,71 +11,83 @@ export const getDataExport = () => {
 			},
 			export_format: [
 				{
-					type: 'csv',
+					type: 'xml',
 					fields_export: [
 						{
-							name: 'Capture Date',
-							value: 'Capture Date'
+							name: 'category',
+							childs: {
+								name: 'child_node',
+								fields: [
+									{
+										name: 'Ust-Identnummer des Merchants',
+										value: 'Ust_Identnummer des Merchants'
+									},
+									{
+										name: 'Umsatzsteuersatz 1',
+										value: 'Umsatzsteuersatz 1'
+									}
+								]
+							}
 						},
+						{
+							name: 'cat',
+							childs: {
+								name: 'child_linh',
+								fields: [
+									{
+										name: 'terrace',
+										value: 'H35'
+									},
+									{
+										name: 'live-sport',
+										value: 'H9'
+									},
+									{
+										name: 'recommendation',
+										childs: {
+											name: 'child_node',
+											fields: [
+												{
+													name: 'terrace',
+													value: 'H35'
+												},
+												{
+													name: 'live-sport',
+													value: 'H9'
+												},
+												{
+													name: 'recommendation',
+													value: 'H54'
+												}
+											]
+										}
+									}
+								]
+							}
+						},
+						{
+							name: 'sub-category',
+							value: 'H0',
+							childs: {
+								name: 'H0',
+								fields: [
+								]
+							}
+						}
+					],
+					fileName: 'Merchant Name',
+					delimiter: ';'
+				},
+				{
+					type: 'csv',
+					fields_export: [
 						{
 							name: 'Merchant Name',
 							value: 'Merchant Name'
 						},
 						{
-							name: 'Txn Amount',
-							value: 'Txn Amount'
-						},
-						{
-							name: 'Txn Currency',
-							value: 'Txn Currency'
-						},
-						{
-							name: 'Foreign Txn Amount',
-							value: 'Foreign Txn Amount'
-						},
-						{
-							name: 'Rechnung Nr.',
-							value: 'Rechnung Nr'
-						},
-						{
-							name: 'Ust-Identnummer des Merchants',
-							value: 'Ust_Identnummer des Merchants'
-						},
-						{
-							name: 'Umsatzsteuersatz 1',
-							value: 'Umsatzsteuersatz 1'
-						},
-						{
-							name: 'Umsatzsteuersatz 2',
-							value: 'Umsatzsteuersatz 2'
-						},
-						{
 							name: 'Leistungsbezeichnung 1',
 							value: 'Leistungsbezeichnung 1'
-						},
-						{
-							name: 'Netto Betrag pro Umsatzsteuersatz 1',
-							value: 'Netto Betrag pro Umsatzsteuersatz 1'
-						},
-						{
-							name: 'Currency',
-							value: 'Currency'
-						},
-						{
-							name: 'Leistungsbezeichnung 2',
-							value: 'Leistungsbezeichnung 2'
-						},
-						{
-							name: 'Card Last 4 Digits',
-							value: 'Card Last 4 Digits'
-						},
-						{
-							name: 'Category',
-							value: 'Category'
-						},
-						{
-							name: 'Receipt Name',
-							value: 'Receipt Name'
 						}
 					],
 					fileName: 'Merchant Name',

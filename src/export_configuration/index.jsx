@@ -1,1 +1,1 @@
-export  {default as ExportConfigurationPage} from './connector/connector';
+export {default as ExportConfigurationPage} from './connector/connector';
