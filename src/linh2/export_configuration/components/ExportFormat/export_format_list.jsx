@@ -109,7 +109,7 @@ export interface IDefautState {
 const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 	const {
 		classes,
-		exportFormats,
+		// exportFormats,
 		setMode,
 		exConfig,
 		setExportConfig,
@@ -119,6 +119,8 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 		setConfigValidator,
 		setFormatItem
 	} = props;
+
+	
 
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ delFormatItem, setDelFormatItem ] = useState('');

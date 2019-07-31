@@ -99,6 +99,13 @@ const AddField_JSON_XML: React.FC<IDefautProps, IDefautState> = (props) => {
 
 	const onAddFieldItem = () => {
 		// address
+
+		const checkEmpty = checkIsEmpty(fieldItem)
+		checkEmpty == true
+		if (checkEmpty) {
+			return
+		} 
+		
 		const initExportField = {
 			name: fieldItem.name,
 			value: fieldItem.value,

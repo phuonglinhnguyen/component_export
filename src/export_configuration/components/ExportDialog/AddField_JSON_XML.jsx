@@ -59,10 +59,6 @@ const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
 		const initExportField = {
 			name: fieldItem.name,
 			value: fieldItem.value,
-			childs: {
-				name: fieldItem.value,
-				fields: []
-			}
 		}
 
 		if (mode === 'add') {
@@ -70,7 +66,7 @@ const AddField_JSON_XML: React.FC<IDefautProps> = (props) => {
 				// setexportFields([initExportField, ...exportFields])
 				setFormatItem({
 					...formatItem,
-					fields_export:[initExportField, ...exportFields]
+					fields_export:[fieldItem, ...exportFields]
 				})
 			} 
 			else {

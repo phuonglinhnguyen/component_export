@@ -105,7 +105,7 @@ const ExportFormatList: React.FC<IDefautProps, IDefautState> = (props) => {
 	const [ delFormatItem, setDelFormatItem ] = useState('');
 	const [ strSearch, setStrSearch ] = useState(null);
 	let searchTimeout = null;
-
+	
 	const onChangeSearch = (e) => {
 		const value = e.target.value;
 		if (searchTimeout) {

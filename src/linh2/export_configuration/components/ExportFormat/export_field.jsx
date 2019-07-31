@@ -15,6 +15,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Collapse from '@material-ui/core/Collapse';
 import FieldChild from './components/FieldChild';
 import ConfirmDialog from '../ConfirmDialog';
+import { getDataExport } from './exportField_test'
 
 const styles: any = (theme: any) => {
 	return {
@@ -79,17 +80,20 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 
 	const exportFields = get(formatItem, 'fields_export', []);
 
-	const [ isOpenAddFieldCSV, setIsOpenAddFieldCSV ] = useState(false);
-	const [ isOpenAddFieldJSON, setIsOpenAddFieldJSON ] = useState(false);
-	const [ isOpenFields, setIsOpenFields ] = useState({});
-	const [ fieldItem, setFieldItem ] = useState(null);
-	const [ fieldItemChild, setFieldItemChild ] = useState(null);
-	const [ selectedFieldItem, setSelectedFieldItem ] = useState(null);
-	const [ address, setAddress ] = useState([]);
-	const [ modeChild, setModeChild ] = useState('addChild');
-	const [ isDelete, setIsOnDelete ] = useState(false);
-	const [ fieldItemDel, setFieldItemDel ] = useState('');
-	const [ status, setStatus ] = useState('');
+	const [isOpenAddFieldCSV, setIsOpenAddFieldCSV] = useState(false);
+	const [isOpenAddFieldJSON, setIsOpenAddFieldJSON] = useState(false);
+	const [isOpenFields, setIsOpenFields] = useState({});
+	const [fieldItem, setFieldItem] = useState(null);
+	const [fieldItemChild, setFieldItemChild] = useState(null);
+	const [selectedFieldItem, setSelectedFieldItem] = useState(null);
+	const [address, setAddress] = useState([]);
+	const [modeChild, setModeChild] = useState('addChild');
+	const [isDelete, setIsOnDelete] = useState(false);
+	const [fieldItemDel, setFieldItemDel] = useState('');
+	const [status, setStatus] = useState('');
+	const [exportFieldTest, setExportFieldTest] = useState(() => {
+		return getDataExport()
+	})
 
 	const renderChilds = (parentField, parentFields, paddingLeft, fieldIndexs) => {
 		return (
@@ -97,7 +101,7 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 				<List component="div" disablePadding>
 					{parentFields.map((fieldItem, fieldIndex) => {
 						const childFields = get(fieldItem, 'childs.fields', []);
-						const newFieldIndexs = [ ...fieldIndexs, fieldIndex ];
+						const newFieldIndexs = [...fieldIndexs, fieldIndex];
 						return (
 							<div>
 								<FieldChild
@@ -157,6 +161,8 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 							className={classes.root}
 						>
 							{exportFields.map((fieldItem) => {
+								console.log(fieldItem);
+								
 								return (
 									<ListItem button className={classes.listItem}>
 										<ListItemText primary={fieldItem.name} secondary={fieldItem.value} />
@@ -189,62 +195,62 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 						</List>
 					</div>
 				) : (
-					<div>
-						<Fab
-							size="small"
-							aria-label="Add"
-							color="primary"
-							onClick={() => {
-								setAddress([]);
-								setIsOpenAddFieldJSON(true);
-								setModeChild('addChild');
-								setSelectedFieldItem(null);
-							}}
-						>
-							<AddIcon />
-						</Fab>
-						<span className={classes.addField}>Add Field json/xml</span>
+						<div>
+							<Fab
+								size="small"
+								aria-label="Add"
+								color="primary"
+								onClick={() => {
+									setAddress([]);
+									setIsOpenAddFieldJSON(true);
+									setModeChild('addChild');
+									setSelectedFieldItem(null);
+								}}
+							>
+								<AddIcon />
+							</Fab>
+							<span className={classes.addField}>Add Field json/xml</span>
 
-						<List
-							component="nav"
-							aria-labelledby="nested-list-subheader"
-							subheader={
-								<ListSubheader component="div" className={classes.subHeader}>
-									Export Fields JSON/XML
+							<List
+								component="nav"
+								aria-labelledby="nested-list-subheader"
+								subheader={
+									<ListSubheader component="div" className={classes.subHeader}>
+										Export Fields JSON/XML
 								</ListSubheader>
-							}
-							className={classes.root}
-						>
-							{exportFields.map((fieldItem, fieldIndex) => {
-								const parentFields = get(fieldItem, 'childs.fields', []);
+								}
+								className={classes.root}
+							>
+								{exportFields.map((fieldItem, fieldIndex) => {
+									const parentFields = get(fieldItem, 'childs.fields', []);
 
-								return (
-									<div className={classes.hihi}>
-										<FieldChild
-											status={status}
-											setStatus={setStatus}
-											fieldItem={fieldItem}
-											setAddress={() => {
-												setAddress([ fieldIndex ]);
-											}}
-											setIsOpenAddFieldJSON={setIsOpenAddFieldJSON}
-											setSelectedFieldItem={setSelectedFieldItem}
-											isOpenFields={isOpenFields}
-											setIsOpenFields={setIsOpenFields}
-											setSelectedFieldItem={setSelectedFieldItem}
-											setModeChild={setModeChild}
-											setIsOnDelete={setIsOnDelete}
-											setFieldItemDel={setFieldItemDel}
-											{...props}
-										/>
+									return (
+										<div className={classes.hihi}>
+											<FieldChild
+												status={status}
+												setStatus={setStatus}
+												fieldItem={fieldItem}
+												setAddress={() => {
+													setAddress([fieldIndex]);
+												}}
+												setIsOpenAddFieldJSON={setIsOpenAddFieldJSON}
+												setSelectedFieldItem={setSelectedFieldItem}
+												isOpenFields={isOpenFields}
+												setIsOpenFields={setIsOpenFields}
+												setSelectedFieldItem={setSelectedFieldItem}
+												setModeChild={setModeChild}
+												setIsOnDelete={setIsOnDelete}
+												setFieldItemDel={setFieldItemDel}
+												{...props}
+											/>
 
-										{renderChilds(fieldItem, parentFields, 40, [ fieldIndex ])}
-									</div>
-								);
-							})}
-						</List>
-					</div>
-				)}
+											{renderChilds(fieldItem, parentFields, 40, [fieldIndex])}
+										</div>
+									);
+								})}
+							</List>
+						</div>
+					)}
 			</div>
 
 			{isOpenAddFieldCSV ? (

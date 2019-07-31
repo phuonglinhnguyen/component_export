@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ExportFormatInput from './export_format_input';
 import ExportFormatList from './export_format_list';
-import { getDataExportFormat } from './test_exportformat';
 const styles: any = (theme: any) => {
 	return {
 		wrapForm: {
@@ -39,6 +38,7 @@ const ExportFormat: React.FC<IDefautProps, IDefautState> = (props) => {
 	const [ formatItem, setFormatItem ] = useState(null);
 	const [ selectedFormatItem, setSelectedFormatItem ] = useState(null);
 	const exportFormats = get(exConfig, 'export_format', []);
+	
 	return (
 		<Grid className={classes.wrapForm} spacing={24}>
 			<Grid item xs={12} md={6} className={classes.formControl1}>

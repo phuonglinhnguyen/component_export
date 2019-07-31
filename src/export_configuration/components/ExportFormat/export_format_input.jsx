@@ -89,7 +89,7 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 		setMode,
 		exConfig,
 		setExportConfig,
-		formatItem,
+		formatItem: formatItemDung,
 		setFormatItem,
 		exportFormats,
 		typeExportFormat,
@@ -102,6 +102,27 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 		{ label: 'json', value: 'json' },
 		{ label: 'db3', value: 'db3' }
 	];
+
+	const bienDungThanhDu = (fields_export) => {
+		return fields_export.map(fieldItem => {
+			if (isEmpty(fieldItem.value)) {
+				fieldItem.value = fieldItem.childs.name;
+			} else if (!fieldItem.childs) {
+				fieldItem.childs = {
+					name: fieldItem.value,
+					fields: []
+				}
+			}
+			fieldItem.childs.fields = bienDungThanhDu(fieldItem.childs.fields)
+			return fieldItem
+		})
+	}
+
+	let formatItem = {...formatItemDung}
+	if (formatItem.type === 'xml' || formatItem.type === 'json') {
+		const fields_export = bienDungThanhDu(formatItem.fields_export)
+		formatItem.fields_export = fields_export
+	}
 
 	const onChangeText = (e) => {
 		const name = e.target.name;
@@ -120,7 +141,29 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 		});
 	};
 
+	const bienDuThanhDung = (fields_export) => {
+		return fields_export.map(fieldItem => {
+			if (fieldItem.childs.fields.length >= 1) {
+				delete fieldItem.value
+			} else if (fieldItem.childs.fields.length === 0) {
+				delete fieldItem.childs
+			}
+			
+			if (fieldItem.childs) {
+				fieldItem.childs.fields = bienDuThanhDung(fieldItem.childs.fields)
+			}
+
+			return fieldItem
+		})
+	}
+
+
 	const onAddTest = () => {
+		const fields_export = bienDuThanhDung(formatItem.fields_export)
+		formatItem.fields_export = fields_export
+
+		console.log(formatItem);
+
 		if (mode === 'add') {
 			const newFormatItem = { ...formatItem };
 			setExportConfig({
@@ -130,11 +173,13 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 			setFormatItem(null);
 		} else if (mode === 'edit') {
 			const newExportFormat = exportFormats.map((_formatItem) => {
-				if (_formatItem.type === formatItem.type) {
+				if (_formatItem.fileName === formatItem.fileName) {
 					return { ...formatItem };
 				}
 				return _formatItem;
 			});
+			console.log(newExportFormat);
+			
 			setExportConfig({
 				...exConfig,
 				export_format: newExportFormat
@@ -150,8 +195,6 @@ const ExportFormatInput: React.FC<IDefautProps, IDefautState> = (props) => {
 		setMode('add');
 		setFormatItem(null);
 	};
-	console.log({ formatItem });
-
 	return (
 		<React.Fragment>
 			<div className={classes.exportFormat}>

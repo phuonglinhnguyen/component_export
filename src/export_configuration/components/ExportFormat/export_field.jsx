@@ -167,7 +167,9 @@ const ExportField: React.FC<IDefautProps, IDefautState> = (props) => {
 								className={classes.root}
 							>
 								{
-									exportFields.map((fieldItem, fieldIndex) => {
+									exportFields.map((fieldItem, fieldIndex) => {	
+										console.log(fieldItem);
+																			
 										const parentFields = get(fieldItem, 'childs.fields', [])
 
 										return (
