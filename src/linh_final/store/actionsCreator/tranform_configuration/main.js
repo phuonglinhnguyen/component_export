@@ -2,7 +2,6 @@ import * as actions from '../../actions/tranform_configuration';
 import { getDataObject } from '@dgtx/coreui';
 import { callAPIGetData, callAPICreateData, callAPIDeleteData, callAPIUpdateData } from './call_api';
 import { cloneDeep, isEmpty } from 'lodash';
-import { showNotification } from '@dgtx/coreui';
 import Config from '../../../views/tranform_configuration/components/Models/Config';
 import { configValidators as default_configValidator } from '../../reducers/tranform_configuration_reducer';
 

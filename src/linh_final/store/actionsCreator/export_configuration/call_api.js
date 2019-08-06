@@ -1,6 +1,14 @@
 import { crudGetList, crudUpdate, crudDelete, crudCreate, getDataObject } from '@dgtx/coreui';
 import { showNotification } from '@dgtx/coreui';
-import { setIsOpenAddDialog, setIsOpenDelDialog } from './main';
+import {
+	setPending,
+	setSuccess,
+	setError,
+	setIsOpenAddDialog,
+	setIsOpenDelDialog,
+	setExportConfig,
+	setIsOpenEditDialog
+} from './main';
 import * as actions from '../../actions/export_configuration';
 
 export const callAPIGetDataExport = (input: any) => async (dispatch: any) => {
@@ -29,14 +37,14 @@ export const callAPIGetDataExport = (input: any) => async (dispatch: any) => {
 
 export const callAPICreateDataExport = (input: any) => async (dispatch: any) => {
 	const { projectId, data } = input;
-	// dispatch(setPending());
+	dispatch(setPending());
 	dispatch(
 		crudCreate(
 			'export_configuration',
 			{ data: data, projectId: projectId },
 			{
 				onSuccess: async () => {
-					// dispatch(setSuccess());
+					dispatch(setSuccess());
 					dispatch(
 						showNotification(`${actions.KEY_TRANSLATE}.add_success`, 'success', {
 							i18n: true,
@@ -46,8 +54,36 @@ export const callAPICreateDataExport = (input: any) => async (dispatch: any) => 
 					dispatch(setIsOpenAddDialog(false));
 				},
 				onFailure: () => {
-					// dispatch(setError());
+					dispatch(setError());
 					dispatch(showNotification(`${actions.KEY_TRANSLATE}.add_error`, 'error', { i18n: true, duration: 1500 }));
+				}
+			}
+		)
+	);
+};
+
+export const callAPIUpdateDataExport = (input: any) => async (dispatch: any) => {
+	const { projectId, data, id } = input;
+	dispatch(setPending());
+	dispatch(
+		crudUpdate(
+			'export_configuration',
+			{ data: data, projectId, id },
+			{
+				onSuccess: async () => {
+					dispatch(setSuccess());
+					dispatch(setExportConfig(null));
+					dispatch(
+						showNotification(`${actions.KEY_TRANSLATE}.edit_success`, 'success', {
+							i18n: true,
+							duration: 1500
+						})
+					);
+					dispatch(setIsOpenEditDialog(false));
+				},
+				onFailure: (error) => {
+					dispatch(setError());
+					dispatch(showNotification(`${actions.KEY_TRANSLATE}.edit_error`, 'error', { i18n: true, duration: 1500 }));
 				}
 			}
 		)
@@ -56,14 +92,14 @@ export const callAPICreateDataExport = (input: any) => async (dispatch: any) => 
 
 export const callAPIDeleteDataExport = (input: any) => async (dispatch: any) => {
 	const { projectId, id } = input;
-	// dispatch(setPending());
+	dispatch(setPending());
 	dispatch(
 		crudDelete(
 			'export_configuration',
 			{ id: id, projectId },
 			{
 				onSuccess: async () => {
-					// dispatch(setSuccess());
+					dispatch(setSuccess());
 					dispatch(
 						showNotification(`${actions.KEY_TRANSLATE}.delete_success`, 'success', {
 							i18n: true,
@@ -73,8 +109,7 @@ export const callAPIDeleteDataExport = (input: any) => async (dispatch: any) => 
 					dispatch(setIsOpenDelDialog(false));
 				},
 				onFailure: (error) => {
-					console.log(error);
-					// dispatch(setError());
+					dispatch(setError());
 					dispatch(
 						showNotification(`${actions.KEY_TRANSLATE}.delete_error`, 'error', {
 							i18n: true,

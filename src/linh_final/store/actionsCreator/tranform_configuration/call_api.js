@@ -9,6 +9,7 @@ import {
 	setIsOpenEditDialog,
 	setIsOpenDelDialog
 } from './main';
+
 import * as actions from '../../actions/tranform_configuration';
 
 export const callAPIGetData = (input: any) => async (dispatch: any) => {
@@ -83,7 +84,6 @@ export const callAPIUpdateData = (input: any) => async (dispatch: any) => {
 					dispatch(setIsOpenEditDialog(false));
 				},
 				onFailure: (error) => {
-					console.log(error);
 					dispatch(setError());
 					dispatch(
 						showNotification(`${actions.KEY_TRANSLATE}.edit_error`, 'error', { i18n: true, duration: 1500 })
@@ -113,7 +113,6 @@ export const callAPIDeleteData = (input: any) => async (dispatch: any) => {
 					dispatch(setIsOpenDelDialog(false));
 				},
 				onFailure: (error) => {
-					console.log(error);
 					dispatch(setError());
 					dispatch(
 						showNotification(`${actions.KEY_TRANSLATE}.delete_error`, 'error', {
